@@ -58,7 +58,7 @@ public class AuthService {
         auditService.log("REGISTER", "User", user.getId().toString(), req.getEmail(),
             "New user registered with role: " + req.getRole());
 
-        emailService.sendWelcome(user.getEmail(), user.getName(), user.getRole().name());
+     
 
         return new RegisterResponse(user.getId(), "ACTIVE",
             "Registration successful. You can now log in.");
