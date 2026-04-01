@@ -26,15 +26,12 @@ com\example\repository\YardSlotRepository.class
 com\example\model\WagonType.class
 com\example\dto\ChangePasswordRequest.class
 com\example\SecurityConfig.class
-com\example\dto\AssetDocumentRequest.class
-com\example\repository\AssetDocumentRepository.class
 com\example\dto\ForgotPasswordRequest.class
 com\example\service\WagonService.class
 com\example\repository\LocomotiveRepository.class
 com\example\service\AuthService.class
 com\example\controller\UserController.class
 com\example\dto\LoginRequest.class
-com\example\model\AssetDocument.class
 com\example\dto\UpdateUserRequest.class
 com\example\model\DocumentStatus.class
 com\example\model\Role.class
@@ -42,7 +39,6 @@ com\example\service\LocomotiveService.class
 com\example\model\YardSlotStatus.class
 com\example\model\User.class
 com\example\service\TrainService.class
-com\example\service\AssetDocumentService.class
 com\example\dto\YardSlotRequest.class
 com\example\controller\WagonController.class
 com\example\model\Locomotive.class
@@ -57,4 +53,3 @@ com\example\model\AssetOperationalStatus.class
 com\example\security\EmailService.class
 com\example\dto\WagonStatusRequest.class
 com\example\dto\LocomotiveStatusRequest.class
-com\example\controller\AssetDocumentController.class
