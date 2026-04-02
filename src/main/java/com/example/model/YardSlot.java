@@ -14,6 +14,9 @@ public class YardSlot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Reference to the parent Yard entity
+    private Long yardId;
+
     @Column(unique = true, nullable = false, length = 20)
     private String slotCode;
 
@@ -28,6 +31,12 @@ public class YardSlot {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private YardSlotStatus status = YardSlotStatus.AVAILABLE;
+
+    // Asset currently occupying this slot (nullable when slot is free)
+    @Enumerated(EnumType.STRING)
+    private AssetType assignedAssetType;
+
+    private Long assignedAssetId;
 
     private LocalDateTime createdAt;
 }
