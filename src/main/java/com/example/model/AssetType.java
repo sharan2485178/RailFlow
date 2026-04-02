@@ -1,5 +1,5 @@
 package com.example.model;
 
 public enum AssetType {
-    WAGON, LOCOMOTIVE
+    WAGON, LOCOMOTIVE, TRAIN
 }
