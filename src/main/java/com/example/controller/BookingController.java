@@ -28,12 +28,14 @@ public class BookingController {
             .body(bookingService.create(req, auth.getName()));
     }
 
+
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','OPERATOR')")
     public ResponseEntity<List<BookingResponse>> getAll(@RequestParam(required = false) String status) {
         return ResponseEntity.ok(bookingService.getAll(status));
     }
 
+    
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','OPERATOR','USER')")
     public ResponseEntity<BookingResponse> getById(@PathVariable Long id) {
@@ -52,6 +54,7 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getAll("CONFIRMED"));
     }
 
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','OPERATOR')")
     public ResponseEntity<BookingResponse> update(@PathVariable Long id,
@@ -59,6 +62,7 @@ public class BookingController {
                                                   Authentication auth) {
         return ResponseEntity.ok(bookingService.update(id, req, auth.getName()));
     }
+
 
     @PutMapping("/{id}/status")
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER')")
