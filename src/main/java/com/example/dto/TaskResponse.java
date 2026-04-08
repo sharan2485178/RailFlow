@@ -1,11 +1,15 @@
 package com.example.dto;
 
-import com.example.model.NotificationEntityType;
-import com.example.model.Task;
-import com.example.model.TaskStatus;
-
 import java.time.LocalDateTime;
 
+import com.example.enums.NotificationEntityType;
+import com.example.enums.TaskStatus;
+import com.example.model.Task;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
 public class TaskResponse {
 
     private Long id;
@@ -32,12 +36,5 @@ public class TaskResponse {
 
     // ── Getters ──────────────────────────────────────────────────
 
-    public Long getId() { return id; }
-    public Long getAssignedTo() { return assignedTo; }
-    public String getDescription() { return description; }
-    public TaskStatus getStatus() { return status; }
-    public Long getRelatedEntityId() { return relatedEntityId; }
-    public NotificationEntityType getRelatedEntityType() { return relatedEntityType; }
-    public LocalDateTime getDueDate() { return dueDate; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    
 }

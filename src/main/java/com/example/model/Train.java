@@ -1,4 +1,5 @@
 package com.example.model;
+import com.example.enums.TrainStatus;
 
 import jakarta.persistence.*;
 

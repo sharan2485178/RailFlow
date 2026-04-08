@@ -3,6 +3,8 @@ package com.example.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
+import com.example.enums.AssetOperationalStatus;
+
 @Entity
 @Table(name = "locomotive")
 public class Locomotive {

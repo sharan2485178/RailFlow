@@ -1,14 +1,15 @@
 package com.example;
 
-import com.example.model.Role;
-import com.example.model.User;
-import com.example.model.UserStatus;
-import com.example.repository.UserRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import com.example.enums.Role;
+import com.example.enums.UserStatus;
+import com.example.model.User;
+import com.example.repository.UserRepository;
 
 @SpringBootApplication
 @EnableAsync

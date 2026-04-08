@@ -3,6 +3,9 @@ package com.example.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
+import com.example.enums.AssetOperationalStatus;
+import com.example.enums.WagonType;
+
 @Entity
 @Table(name = "wagon")
 public class Wagon {
@@ -15,8 +18,8 @@ public class Wagon {
     @Column(nullable = false)
     private WagonType type;
 
-    @Column(name = "capacity_ton", nullable = false, precision = 10, scale = 2)
-    private BigDecimal capacityTon;
+    @Column(name = "capacity_ton", nullable = false)
+    private Double capacityTon;
 
     @Column(name = "serial_number", length = 50, unique = true, nullable = false)
     private String serialNumber;
@@ -37,10 +40,17 @@ public class Wagon {
     public WagonType getType() { return type; }
     public void setType(WagonType type) { this.type = type; }
 
-    public BigDecimal getCapacityTon() { return capacityTon; }
-    public void setCapacityTon(BigDecimal capacityTon) { this.capacityTon = capacityTon; }
+   
 
-    public String getSerialNumber() { return serialNumber; }
+    public Double getCapacityTon() {
+		return capacityTon;
+	}
+
+	public void setCapacityTon(Double capacityTon) {
+		this.capacityTon = capacityTon;
+	}
+
+	public String getSerialNumber() { return serialNumber; }
     public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
 
     public AssetOperationalStatus getStatus() { return status; }

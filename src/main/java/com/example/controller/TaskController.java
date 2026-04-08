@@ -1,24 +1,37 @@
 package com.example.controller;
 
-import com.example.dto.TaskCreateRequest;
-import com.example.dto.TaskResponse;
-import com.example.dto.TaskStatusRequest;
-import com.example.service.TaskService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.example.api.APIResponse;
+import com.example.dto.TaskCreateRequest;
+import com.example.dto.TaskResponse;
+import com.example.dto.TaskStatusRequest;
+import com.example.service.TaskService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
 
-    @Autowired private TaskService taskService;
+    private final TaskService taskService;
+
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     /**
      * POST /api/tasks
@@ -26,14 +39,11 @@ public class TaskController {
      */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<TaskResponse> create(@Valid @RequestBody TaskCreateRequest req) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                taskService.create(
-                        req.getAssignedTo(), req.getDescription(),
-                        req.getRelatedEntityType(), req.getRelatedEntityId(),
-                        req.getDueDate()
-                )
-        );
+    public ResponseEntity<APIResponse<TaskResponse>> create(
+            @Valid @RequestBody TaskCreateRequest req) {
+        TaskResponse response = taskService.create(req);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.success("Task created successfully", response));
     }
 
     /**
@@ -43,10 +53,12 @@ public class TaskController {
      */
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','OPERATOR','ENGINEER','YARD_MANAGER','MAINTENANCE','DRIVER','USER','AUDITOR')")
-    public ResponseEntity<List<TaskResponse>> getMyTasks(
+    public ResponseEntity<APIResponse<List<TaskResponse>>> getMyTasks(
             @RequestParam(required = false) String status,
             Authentication auth) {
-        return ResponseEntity.ok(taskService.getMyTasks(auth.getName(), status));
+        return ResponseEntity.ok(
+                APIResponse.success("Tasks fetched successfully",
+                        taskService.getMyTasks(auth.getName(), status)));
     }
 
     /**
@@ -55,22 +67,24 @@ public class TaskController {
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','OPERATOR','ENGINEER','YARD_MANAGER','MAINTENANCE','DRIVER','USER','AUDITOR')")
-    public ResponseEntity<TaskResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(taskService.getById(id));
+    public ResponseEntity<APIResponse<TaskResponse>> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                APIResponse.success("Task fetched successfully", taskService.getById(id)));
     }
 
     /**
      * PUT /api/tasks/{id}/status
      * Assignee updates their task status (PENDING → IN_PROGRESS → COMPLETED).
-     * Automatically checks sibling completion when marked COMPLETED.
      */
     @PutMapping("/{id}/status")
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','OPERATOR','ENGINEER','YARD_MANAGER','MAINTENANCE','DRIVER','USER','AUDITOR')")
-    public ResponseEntity<TaskResponse> updateStatus(
+    public ResponseEntity<APIResponse<TaskResponse>> updateStatus(
             @PathVariable Long id,
             @Valid @RequestBody TaskStatusRequest req,
             Authentication auth) {
-        return ResponseEntity.ok(taskService.updateStatus(id, req, auth.getName()));
+        return ResponseEntity.ok(
+                APIResponse.success("Task status updated successfully",
+                        taskService.updateStatus(id, req, auth.getName())));
     }
 
     /**
@@ -80,8 +94,9 @@ public class TaskController {
      */
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TaskResponse>> getAll(
+    public ResponseEntity<APIResponse<List<TaskResponse>>> getAll(
             @RequestParam(required = false) String status) {
-        return ResponseEntity.ok(taskService.getAll(status));
+        return ResponseEntity.ok(
+                APIResponse.success("All tasks fetched successfully", taskService.getAll(status)));
     }
 }

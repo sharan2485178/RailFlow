@@ -3,6 +3,8 @@ package com.example.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.example.enums.AssetType;
+
 @Entity
 @Table(name = "shunting_operation")
 public class ShuntingOperation {
@@ -35,7 +37,6 @@ public class ShuntingOperation {
 
     public ShuntingOperation() {}
 
-    // ── Getters & Setters ────────────────────────────────────────
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

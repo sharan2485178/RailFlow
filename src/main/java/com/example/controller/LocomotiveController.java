@@ -1,18 +1,28 @@
 package com.example.controller;
 
-import com.example.dto.LocomotiveRequest;
-import com.example.dto.LocomotiveStatusRequest;
-import com.example.model.Locomotive;
-import com.example.service.LocomotiveService;
-import jakarta.validation.Valid;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.example.api.APIResponse;
+import com.example.dto.LocomotiveRequest;
+import com.example.dto.LocomotiveResponse;
+import com.example.dto.LocomotiveStatusRequest;
+import com.example.service.LocomotiveService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/locomotive")
@@ -22,23 +32,31 @@ public class LocomotiveController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Locomotive> register(@Valid @RequestBody LocomotiveRequest req,
-                                               Authentication auth) {
+    public ResponseEntity<APIResponse<LocomotiveResponse>> register(
+            @Valid @RequestBody LocomotiveRequest req, Authentication auth) {
+
+        LocomotiveResponse response = locomotiveService.register(req, auth.getName());
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(locomotiveService.register(req, auth.getName()));
+                .body(APIResponse.success("Locomotive registered successfully.", response));
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER')")
-    public ResponseEntity<List<Locomotive>> getAll(@RequestParam(required = false) String status) {
-        return ResponseEntity.ok(locomotiveService.getAll(status));
+    public ResponseEntity<APIResponse<List<LocomotiveResponse>>> getAll(
+            @RequestParam(required = false) String status) {
+
+        List<LocomotiveResponse> response = locomotiveService.getAll(status);
+        return ResponseEntity.ok(APIResponse.success("Locomotives fetched successfully.", response));
     }
 
     @PutMapping("/{locoId}/status")
     @PreAuthorize("hasAnyRole('ADMIN','MAINTENANCE')")
-    public ResponseEntity<Locomotive> changeStatus(@PathVariable Long locoId,
-                                                   @Valid @RequestBody LocomotiveStatusRequest req,
-                                                   Authentication auth) {
-        return ResponseEntity.ok(locomotiveService.changeStatus(locoId, req, auth.getName()));
+    public ResponseEntity<APIResponse<LocomotiveResponse>> changeStatus(
+            @PathVariable Long locoId,
+            @Valid @RequestBody LocomotiveStatusRequest req,
+            Authentication auth) {
+
+        LocomotiveResponse response = locomotiveService.changeStatus(locoId, req, auth.getName());
+        return ResponseEntity.ok(APIResponse.success("Locomotive status updated successfully.", response));
     }
 }

@@ -1,17 +1,22 @@
 package com.example.dto;
 
-import com.example.model.Notification;
-import com.example.model.NotificationCategory;
-import com.example.model.NotificationEntityType;
-import com.example.model.NotificationStatus;
-
 import java.time.LocalDateTime;
 
+import com.example.enums.NotificationCategory;
+import com.example.enums.NotificationEntityType;
+import com.example.enums.NotificationStatus;
+import com.example.enums.Role;
+import com.example.model.Notification;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
 public class NotificationResponse {
 
     private Long id;
     private Long userId;
-    private String role;
+    private Role role;
     private String message;
     private Long entityId;
     private NotificationEntityType entityType;
@@ -35,13 +40,6 @@ public class NotificationResponse {
 
     // ── Getters ──────────────────────────────────────────────────
 
-    public Long getId() { return id; }
-    public Long getUserId() { return userId; }
-    public String getRole() { return role; }
-    public String getMessage() { return message; }
-    public Long getEntityId() { return entityId; }
-    public NotificationEntityType getEntityType() { return entityType; }
-    public NotificationCategory getCategory() { return category; }
-    public NotificationStatus getStatus() { return status; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    
+   
 }

@@ -1,13 +1,20 @@
 package com.example.repository;
 
-import com.example.model.YardSlot;
-import com.example.model.YardSlotStatus;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.example.enums.YardSlotStatus;
+import com.example.model.YardSlot;
+@Repository
 public interface YardSlotRepository extends JpaRepository<YardSlot, Long> {
-    boolean existsBySlotCode(String slotCode);
+    
     List<YardSlot> findByStatus(YardSlotStatus status);
-    List<YardSlot> findByYardName(String yardName);
+    List<YardSlot> findByYardId(Long yardId);
+ // available slots in a yard
+    List<YardSlot> findByYardIdAndStatus(Long yardId, YardSlotStatus status);
+    
+    boolean existsByYardIdAndTrackNumberAndPosition(
+            Long yardId, String trackNumber, Integer position);
 }

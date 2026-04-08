@@ -2,7 +2,10 @@ package com.example.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
 public class YardRequest {
 
     @NotBlank
@@ -16,12 +19,5 @@ public class YardRequest {
 
     // ── Getters & Setters ────────────────────────────────────────
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public Integer getTotalSlots() { return totalSlots; }
-    public void setTotalSlots(Integer totalSlots) { this.totalSlots = totalSlots; }
+    
 }

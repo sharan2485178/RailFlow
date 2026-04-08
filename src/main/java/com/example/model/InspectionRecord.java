@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.example.enums.AssetType;
+import com.example.enums.InspectionStatus;
+
 @Entity
 @Table(name = "inspection_record")
 public class InspectionRecord {

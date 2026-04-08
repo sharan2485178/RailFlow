@@ -1,11 +1,18 @@
 package com.example.dto;
 
-import com.example.model.AssetType;
-import com.example.model.InspectionRecord;
-import com.example.model.InspectionStatus;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.example.enums.AssetType;
+import com.example.enums.InspectionStatus;
+import com.example.model.InspectionRecord;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class InspectionResponse {
 
     private Long id;
@@ -34,13 +41,5 @@ public class InspectionResponse {
 
     // ── Getters ──────────────────────────────────────────────────
 
-    public Long getId() { return id; }
-    public Long getTimetableId() { return timetableId; }
-    public AssetType getAssetType() { return assetType; }
-    public Long getAssetId() { return assetId; }
-    public LocalDate getInspectionDate() { return inspectionDate; }
-    public String getInspectedBy() { return inspectedBy; }
-    public InspectionStatus getResult() { return result; }
-    public String getRemarks() { return remarks; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    
 }
