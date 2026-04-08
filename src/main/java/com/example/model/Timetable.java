@@ -1,7 +1,12 @@
 package com.example.model;
-
+import com.example.enums.TimetableStatus;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
+
+import com.example.enums.TimetableStatus;
+
+import jakarta.persistence.criteria.Fetch;
 
 @Entity
 @Table(name = "timetable")
@@ -12,34 +17,22 @@ public class Timetable {
     private Long id;
 
     @Column(nullable = false)
-    private Long trainId;
-
-    @Column(nullable = false)
-    private String origin;
-
-    @Column(nullable = false)
-    private String destination;
-
-    @Column(nullable = false)
     private LocalDateTime departureTime;
 
     @Column(nullable = false)
     private LocalDateTime arrivalTime;
 
+    @Column(nullable=false)
+    private String pathCode;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TimetableStatus status = TimetableStatus.SCHEDULED;
+    private TimetableStatus status = TimetableStatus.DRAFT;
 
-    // Comma-separated wagon IDs (e.g. "1,2,3")
-    @Column(columnDefinition = "TEXT")
-    private String wagonIdsJson;
-
-    // Comma-separated locomotive IDs (e.g. "1,2")
-    @Column(columnDefinition = "TEXT")
-    private String locomotiveIdsJson;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="train_id",nullable=false)
+    private Train train;
+    
 
     public Timetable() {}
 
@@ -48,14 +41,6 @@ public class Timetable {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Long getTrainId() { return trainId; }
-    public void setTrainId(Long trainId) { this.trainId = trainId; }
-
-    public String getOrigin() { return origin; }
-    public void setOrigin(String origin) { this.origin = origin; }
-
-    public String getDestination() { return destination; }
-    public void setDestination(String destination) { this.destination = destination; }
 
     public LocalDateTime getDepartureTime() { return departureTime; }
     public void setDepartureTime(LocalDateTime departureTime) { this.departureTime = departureTime; }
@@ -66,18 +51,23 @@ public class Timetable {
     public TimetableStatus getStatus() { return status; }
     public void setStatus(TimetableStatus status) { this.status = status; }
 
-    public String getWagonIdsJson() { return wagonIdsJson; }
-    public void setWagonIdsJson(String wagonIdsJson) { this.wagonIdsJson = wagonIdsJson; }
-
-    public String getLocomotiveIdsJson() { return locomotiveIdsJson; }
-    public void setLocomotiveIdsJson(String locomotiveIdsJson) { this.locomotiveIdsJson = locomotiveIdsJson; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    @Override
-    public String toString() {
-        return "Timetable{id=" + id + ", trainId=" + trainId + ", origin='" + origin
-                + "', destination='" + destination + "', status=" + status + "}";
+    public String getPathCode() {
+        return pathCode;
     }
+
+    public void setPathCode(String pathCode) {
+        this.pathCode = pathCode;
+    }
+
+    public Train getTrain() {
+        return train;
+    }
+
+    public void setTrain(Train train) {
+        this.train = train;
+    }
+
+    
+
+    
 }

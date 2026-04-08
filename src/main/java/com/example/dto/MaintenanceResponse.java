@@ -1,12 +1,19 @@
 package com.example.dto;
 
-import com.example.model.AssetType;
-import com.example.model.MaintenancePriority;
-import com.example.model.MaintenanceRecord;
-import com.example.model.MaintenanceStatus;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.example.enums.AssetType;
+import com.example.enums.MaintenancePriority;
+import com.example.enums.MaintenanceStatus;
+import com.example.model.MaintenanceRecord;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MaintenanceResponse {
 
     private Long id;
@@ -43,17 +50,5 @@ public class MaintenanceResponse {
 
     // ── Getters ──────────────────────────────────────────────────
 
-    public Long getId() { return id; }
-    public Long getTimetableId() { return timetableId; }
-    public AssetType getAssetType() { return assetType; }
-    public Long getAssetId() { return assetId; }
-    public String getDescription() { return description; }
-    public MaintenancePriority getPriority() { return priority; }
-    public MaintenanceStatus getStatus() { return status; }
-    public String getAssignedTo() { return assignedTo; }
-    public String getReportedBy() { return reportedBy; }
-    public LocalDate getScheduledDate() { return scheduledDate; }
-    public LocalDateTime getCompletedAt() { return completedAt; }
-    public String getNotes() { return notes; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    
 }

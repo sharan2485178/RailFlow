@@ -1,17 +1,22 @@
 package com.example.dto;
 
-import com.example.model.NotificationCategory;
-import com.example.model.NotificationEntityType;
+import com.example.enums.NotificationCategory;
+import com.example.enums.NotificationEntityType;
+import com.example.enums.Role;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
 public class NotificationCreateRequest {
 
     @NotNull(message = "userId is required")
     private Long userId;
 
     @NotBlank(message = "role is required")
-    private String role;
+    private Role role;
 
     @NotBlank(message = "message is required")
     private String message;
@@ -27,21 +32,5 @@ public class NotificationCreateRequest {
 
     // ── Getters & Setters ────────────────────────────────────────
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
-
-    public Long getEntityId() { return entityId; }
-    public void setEntityId(Long entityId) { this.entityId = entityId; }
-
-    public NotificationEntityType getEntityType() { return entityType; }
-    public void setEntityType(NotificationEntityType entityType) { this.entityType = entityType; }
-
-    public NotificationCategory getCategory() { return category; }
-    public void setCategory(NotificationCategory category) { this.category = category; }
+    
 }

@@ -1,39 +1,82 @@
 package com.example.exception;
 
-import com.example.dto.ApiResponse;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.stream.Collectors;
+import com.example.api.APIResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiResponse> handleRuntime(RuntimeException ex) {
-        return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(new ApiResponse(false, ex.getMessage()));
+    // 404 — entity not found
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<APIResponse<Void>> handleEntityNotFound(
+            EntityNotFoundException ex) {
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(APIResponse.error(ex.getMessage()));
+    }
+    @ExceptionHandler(EntityAlreadyExistException.class)
+    public ResponseEntity<APIResponse<Void>> handleEntityAlreadyFound(
+            EntityAlreadyExistException ex) {
+
+        return ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
+                .body(APIResponse.error(ex.getMessage()));
     }
 
+    // 409 — invalid state, business rule violation
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<APIResponse<Void>> handleIllegalState(
+            IllegalStateException ex) {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(APIResponse.error(ex.getMessage()));
+    }
+
+    // 400 — invalid argument
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<APIResponse<Void>> handleIllegalArgument(
+            IllegalArgumentException ex) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(APIResponse.error(ex.getMessage()));
+    }
+
+    // 400 — @Valid validation failures
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<APIResponse<Void>> handleValidation(
+            MethodArgumentNotValidException ex) {
+
         String errors = ex.getBindingResult().getFieldErrors()
-            .stream()
-            .map(e -> e.getField() + ": " + e.getDefaultMessage())
-            .collect(Collectors.joining(", "));
-        return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(new ApiResponse(false, errors));
+                .stream()
+                .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(APIResponse.error(errors));
     }
 
+    // 400 — runtime exceptions from service
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<APIResponse<Void>> handleRuntime(
+            RuntimeException ex) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(APIResponse.error(ex.getMessage()));
+    }
+
+    // 500 — anything unexpected
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleGeneral(Exception ex) {
-        return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(new ApiResponse(false, "Internal server error: " + ex.getMessage()));
+    public ResponseEntity<APIResponse<Void>> handleGeneral(
+            Exception ex) {
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(APIResponse.error(
+                        "Internal server error: " + ex.getMessage()));
     }
 }

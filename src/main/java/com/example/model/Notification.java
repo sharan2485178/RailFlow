@@ -1,7 +1,20 @@
 package com.example.model;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+import com.example.enums.NotificationCategory;
+import com.example.enums.NotificationEntityType;
+import com.example.enums.NotificationStatus;
+import com.example.enums.Role;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "notification")
@@ -14,8 +27,9 @@ public class Notification {
     @Column(nullable = false)
     private Long userId;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
@@ -48,9 +62,6 @@ public class Notification {
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
 
@@ -65,8 +76,18 @@ public class Notification {
 
     public NotificationStatus getStatus() { return status; }
     public void setStatus(NotificationStatus status) { this.status = status; }
+    
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     // ── toString ─────────────────────────────────────────────────

@@ -3,6 +3,9 @@ package com.example.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.example.enums.NotificationEntityType;
+import com.example.enums.TaskStatus;
+
 @Entity
 @Table(name = "task")
 public class Task {

@@ -1,12 +1,14 @@
 package com.example.repository;
 
-import com.example.model.Notification;
-import com.example.model.NotificationCategory;
-import com.example.model.NotificationStatus;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.example.enums.NotificationCategory;
+import com.example.enums.NotificationStatus;
+import com.example.model.Notification;
+@Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findByUserId(Long userId);
     List<Notification> findByUserIdAndStatus(Long userId, NotificationStatus status);

@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.example.enums.AssetType;
+import com.example.enums.MaintenancePriority;
+import com.example.enums.MaintenanceStatus;
+
 @Entity
 @Table(name = "maintenance_record")
 public class MaintenanceRecord {

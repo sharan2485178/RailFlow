@@ -1,2 +1,3 @@
 target/
 .claude/
+src/main/resources/application.properties

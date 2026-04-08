@@ -1,13 +1,16 @@
 package com.example.dto;
 
-import com.example.model.TaskStatus;
-import jakarta.validation.constraints.NotNull;
+import com.example.enums.TaskStatus;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
 public class TaskStatusRequest {
 
     @NotNull(message = "Status is required")
     private TaskStatus status;
 
-    public TaskStatus getStatus() { return status; }
-    public void setStatus(TaskStatus status) { this.status = status; }
+    
 }

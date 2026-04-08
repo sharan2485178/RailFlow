@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+import com.example.enums.AssetType;
+import com.example.enums.YardSlotStatus;
+
 @Entity
 @Table(name = "yard_slot")
 @Data
@@ -12,21 +15,18 @@ public class YardSlot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long slotId;
 
-    // Reference to the parent Yard entity
-    private Long yardId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "yard_id", nullable = false)
+    private Yard yard;
 
-    @Column(unique = true, nullable = false, length = 20)
-    private String slotCode;
-
-    @Column(nullable = false)
-    private String yardName;
 
     @Column(nullable = false)
     private String trackNumber;
 
-    private Integer capacity;
+    @Column(nullable=false)
+    private int position;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -38,5 +38,65 @@ public class YardSlot {
 
     private Long assignedAssetId;
 
-    private LocalDateTime createdAt;
+    public Long getSlotId() {
+        return slotId;
+    }
+
+    public void setSlotId(Long slotId) {
+        this.slotId = slotId;
+    }
+
+
+    public String getTrackNumber() {
+        return trackNumber;
+    }
+
+    public void setTrackNumber(String trackNumber) {
+        this.trackNumber = trackNumber;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public YardSlotStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(YardSlotStatus status) {
+        this.status = status;
+    }
+
+    public AssetType getAssignedAssetType() {
+        return assignedAssetType;
+    }
+
+    public void setAssignedAssetType(AssetType assignedAssetType) {
+        this.assignedAssetType = assignedAssetType;
+    }
+
+    public Long getAssignedAssetId() {
+        return assignedAssetId;
+    }
+
+    public void setAssignedAssetId(Long assignedAssetId) {
+        this.assignedAssetId = assignedAssetId;
+    }
+
+	public Yard getYard() {
+		return yard;
+	}
+
+	public void setYard(Yard yard) {
+		this.yard = yard;
+	}
+    
+    
+
+    
+
 }

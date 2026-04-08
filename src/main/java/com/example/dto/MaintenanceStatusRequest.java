@@ -1,8 +1,12 @@
 package com.example.dto;
 
-import com.example.model.MaintenanceStatus;
-import jakarta.validation.constraints.NotNull;
+import com.example.enums.MaintenanceStatus;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+@Data
+@AllArgsConstructor
 public class MaintenanceStatusRequest {
 
     @NotNull
@@ -12,9 +16,5 @@ public class MaintenanceStatusRequest {
 
     // ── Getters & Setters ────────────────────────────────────────
 
-    public MaintenanceStatus getStatus() { return status; }
-    public void setStatus(MaintenanceStatus status) { this.status = status; }
-
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
+    
 }

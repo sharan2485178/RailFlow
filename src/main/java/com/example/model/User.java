@@ -1,6 +1,9 @@
 package com.example.model;
 
 import jakarta.persistence.*;
+
+import com.example.enums.Role;
+import com.example.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 

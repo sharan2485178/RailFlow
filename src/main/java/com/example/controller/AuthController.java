@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.api.APIResponse;
 import com.example.dto.*;
 import com.example.service.AuthService;
 import jakarta.validation.Valid;
@@ -18,24 +19,44 @@ public class AuthController {
         this.authService = authService;
     }
 
+    // POST /api/auth/register
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest req) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(req));
+    public ResponseEntity<APIResponse<RegisterResponse>> register(
+            @Valid @RequestBody RegisterRequest req) {
+
+        RegisterResponse res = authService.register(req);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.success("User registered successfully", res));
     }
 
+    // POST /api/auth/login
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest req) {
-        return ResponseEntity.ok(authService.login(req));
+    public ResponseEntity<APIResponse<JwtResponse>> login(
+            @Valid @RequestBody LoginRequest req) {
+
+        JwtResponse res = authService.login(req);
+        return ResponseEntity.ok(
+                APIResponse.success("Login successful", res));
     }
 
+    // POST /api/auth/forgot-password
     @PostMapping("/forgot-password")
-    public ResponseEntity<ApiResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest req) {
-        return ResponseEntity.ok(authService.forgotPassword(req));
+    public ResponseEntity<APIResponse<Void>> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest req) {
+
+        authService.forgotPassword(req);
+        return ResponseEntity.ok(
+                APIResponse.success("Password reset instructions sent"));
     }
 
+    // PUT /api/auth/change-password
     @PutMapping("/change-password")
-    public ResponseEntity<ApiResponse> changePassword(@Valid @RequestBody ChangePasswordRequest req,
-                                                       Authentication auth) {
-        return ResponseEntity.ok(authService.changePassword(auth.getName(), req));
+    public ResponseEntity<APIResponse<Void>> changePassword(
+            @Valid @RequestBody ChangePasswordRequest req,
+            Authentication auth) {
+
+        authService.changePassword(auth.getName(), req);
+        return ResponseEntity.ok(
+                APIResponse.success("Password changed successfully"));
     }
 }

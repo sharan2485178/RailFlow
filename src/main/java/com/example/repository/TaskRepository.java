@@ -1,13 +1,15 @@
 package com.example.repository;
 
-import com.example.model.NotificationEntityType;
-import com.example.model.Task;
-import com.example.model.TaskStatus;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.example.enums.NotificationEntityType;
+import com.example.enums.TaskStatus;
+import com.example.model.Task;
+@Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByAssignedTo(Long assignedTo);
     List<Task> findByAssignedToAndStatus(Long assignedTo, TaskStatus status);

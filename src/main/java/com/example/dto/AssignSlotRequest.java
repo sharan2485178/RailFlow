@@ -1,8 +1,13 @@
 package com.example.dto;
 
-import com.example.model.AssetType;
-import jakarta.validation.constraints.NotNull;
+import com.example.enums.AssetType;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.AllArgsConstructor;
+
+@Data
+@AllArgsConstructor
 public class AssignSlotRequest {
 
     @NotNull
@@ -13,9 +18,5 @@ public class AssignSlotRequest {
 
     // ── Getters & Setters ────────────────────────────────────────
 
-    public AssetType getAssetType() { return assetType; }
-    public void setAssetType(AssetType assetType) { this.assetType = assetType; }
-
-    public Long getAssetId() { return assetId; }
-    public void setAssetId(Long assetId) { this.assetId = assetId; }
+    
 }
