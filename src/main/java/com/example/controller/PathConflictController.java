@@ -29,10 +29,7 @@ public class PathConflictController {
         this.pathConflictService = pathConflictService;
     }
 
-    /**
-     * GET /api/path-conflicts
-     * Retrieve all unresolved path conflicts.
-     */
+    
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','YARD_MANAGER')")
     public ResponseEntity<APIResponse<List<PathConflictResponse>>> getAllUnresolved() {

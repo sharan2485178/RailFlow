@@ -18,8 +18,8 @@ public class TimetableAssetsResponse {
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
     private TimetableStatus status;
-    private List<Wagon> wagons;
-    private List<Locomotive> locomotives;
+    private List<WagonDTO> wagons;
+    private List<LocomotiveDTO> locomotives;
 
     
 

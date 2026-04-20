@@ -79,4 +79,16 @@ public class GlobalExceptionHandler {
                 .body(APIResponse.error(
                         "Internal server error: " + ex.getMessage()));
     }
+    
+    @ExceptionHandler(InvalidTimeRangeException.class)
+    public ResponseEntity<APIResponse<Void>> handleInvalidTimeRange(
+            InvalidTimeRangeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(APIResponse.error(ex.getMessage()));
+    }
+    
+    @ExceptionHandler(AssetAlreadyAssignedException.class)
+    public ResponseEntity<APIResponse<Void>>handleAssetAlreadyAssigned(AssetAlreadyAssignedException ex){
+    	    return ResponseEntity.status(HttpStatus.CONFLICT).body(APIResponse.error(ex.getMessage()));
+    }
 }

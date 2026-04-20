@@ -59,4 +59,24 @@ public class TrainController {
         TrainResponse response = trainService.changeStatus(trainId, req, auth.getName());
         return ResponseEntity.ok(APIResponse.success("Train status updated successfully.", response));
     }
+    
+    @GetMapping("/{trainId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<APIResponse<TrainResponse>> getById(
+            @PathVariable Long trainId) {
+
+        TrainResponse response = trainService.getById(trainId);
+        return ResponseEntity.ok(APIResponse.success("Train fetched successfully.", response));
+    }
+
+    @PutMapping("/{trainId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<APIResponse<TrainResponse>> update(
+            @PathVariable Long trainId,
+            @Valid @RequestBody TrainRequest req,
+            Authentication auth) {
+
+        TrainResponse response = trainService.update(trainId, req, auth.getName());
+        return ResponseEntity.ok(APIResponse.success("Train updated successfully.", response));
+    }
 }

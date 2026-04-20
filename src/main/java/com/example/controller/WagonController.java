@@ -70,7 +70,7 @@ public class WagonController {
     }
 
     @PutMapping("/{wagonId}/status")
-    @PreAuthorize("hasAnyRole('ADMIN','MAINTENANCE')")
+    @PreAuthorize("hasAnyRole('ADMIN','MAINTENANCE_CREW')")
     public ResponseEntity<APIResponse<WagonResponse>> changeStatus(
             @PathVariable Long wagonId,
             @Valid @RequestBody WagonStatusRequest req,

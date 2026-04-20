@@ -37,7 +37,7 @@ public class WagonAssignment {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
-	private AssetAssignmentStatus assetAssignmentStatus=AssetAssignmentStatus.PENDING;
+	private AssetAssignmentStatus assetAssignmentStatus=AssetAssignmentStatus.PENDING; //PENDING,CONFIRMED,IN_TRANSIT, COMPLETED, CANCELED
 
 	public Long getId() {
 		return id;

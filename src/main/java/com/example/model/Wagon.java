@@ -16,7 +16,7 @@ public class Wagon {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WagonType type;
+    private WagonType type; // TANKER(LIQUID,HAZARDOUS), BOX(DRY_BULK,CONTAINER), FLAT(CONTAINER, HEAVY_MACHINERY, STEEL, TIMBER)
 
     @Column(name = "capacity_ton", nullable = false)
     private Double capacityTon;
@@ -26,7 +26,7 @@ public class Wagon {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AssetOperationalStatus status = AssetOperationalStatus.AVAILABLE;
+    private AssetOperationalStatus status = AssetOperationalStatus.AVAILABLE; // AVAILABLE, ASSIGNED, SERVICEABLE,IN_TRANSIT,UNDER_MAINTENANCE, DECOMMISSIONED
 
     // ── Constructors ─────────────────────────────────────────────
 

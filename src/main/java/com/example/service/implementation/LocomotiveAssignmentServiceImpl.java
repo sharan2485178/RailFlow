@@ -5,8 +5,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dto.LocomotiveAssignmentRequest;
 import com.example.dto.LocomotiveAssignmentResponse;
+import com.example.enums.AssetAssignmentStatus;
 import com.example.enums.AssetOperationalStatus;
 import com.example.enums.TimetableStatus;
+import com.example.exception.EntityNotFoundException;
 import com.example.mapper.LocomotiveAssignmentMapper;
 import com.example.model.LocomotiveAssignment;
 import com.example.repository.LocomotiveAssignmentRepository;
@@ -32,7 +34,7 @@ public class LocomotiveAssignmentServiceImpl implements LocomotiveAssignmentServ
     @Transactional
     public LocomotiveAssignmentResponse assign(LocomotiveAssignmentRequest req) {
 
-        // timetable must be PUBLISHED
+        
         timetableRepository.findById(req.getTimetableId())
                 .filter(t -> t.getStatus() == TimetableStatus.PUBLISHED)
                 .orElseThrow(() -> new IllegalStateException(
@@ -45,8 +47,10 @@ public class LocomotiveAssignmentServiceImpl implements LocomotiveAssignmentServ
                     "Timetable " + req.getTimetableId()
                     + " already has a locomotive assigned");
         }
+        
+        
 
-        // mapper validates locomotive exists
+        
         LocomotiveAssignment assignment =
                 locomotiveAssignmentMapper.toEntity(req);
 
@@ -57,6 +61,7 @@ public class LocomotiveAssignmentServiceImpl implements LocomotiveAssignmentServ
                     "Locomotive is not available. Status: "
                     + assignment.getLocomotive().getStatus());
         }
+        
 
         locomotiveAssignmentRepository.save(assignment);
         return locomotiveAssignmentMapper.toDto(assignment);

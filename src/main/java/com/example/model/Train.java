@@ -25,7 +25,7 @@ public class Train {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TrainStatus status = TrainStatus.ACTIVE;
+    private TrainStatus status = TrainStatus.ACTIVE; // ACTIVE, INACTIVE, DECOMMISSIONED
 
     // ── Constructors ─────────────────────────────────────────────
 

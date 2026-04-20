@@ -15,7 +15,8 @@ public class Locomotive {
 
     @Column(nullable = false)
     private String model;
-
+    //precision=total number of digits allowed totally, scale= how many digits after decimal point
+    //max value = 99999999.99
     @Column(name = "capacity_ton", nullable = false, precision = 10, scale = 2)
     private BigDecimal capacityTon;
 
@@ -24,7 +25,7 @@ public class Locomotive {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AssetOperationalStatus status = AssetOperationalStatus.AVAILABLE;
+    private AssetOperationalStatus status = AssetOperationalStatus.AVAILABLE; // AVAILABLE, ASSIGNED, SERVICEABLE,IN_TRANSIT,UNDER_MAINTENANCE, DECOMMISSIONED
 
     // ── Constructors ─────────────────────────────────────────────
 

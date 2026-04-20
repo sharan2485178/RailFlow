@@ -33,10 +33,7 @@ public class ShuntingController {
         this.shuntingService = shuntingService;
     }
 
-    /**
-     * POST /api/shunting
-     * Move an asset from one slot to another within the yard.
-     */
+    
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','YARD_MANAGER')")
     public ResponseEntity<APIResponse<ShuntingResponse>> shunt(

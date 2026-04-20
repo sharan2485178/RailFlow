@@ -34,10 +34,7 @@ public class CrewAssignmentController {
         this.userService = userService;
     }
 
-    // POST /api/crew — register crew member
-   
-
-    // GET /api/crew — list all available crew
+    
     @GetMapping("/api/crew")
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER')")
     public ResponseEntity<APIResponse<List<UserResponse>>> getAvailableCrew() {
@@ -47,7 +44,7 @@ public class CrewAssignmentController {
                         crewAssignmentService.getAvailableCrew()));
     }
 
-    // POST /api/crew-assignments — assign crew to timetable
+    
     @PostMapping("/api/crew-assignments")
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER')")
     public ResponseEntity<APIResponse<CrewAssignmentResponse>> assign(
@@ -58,8 +55,7 @@ public class CrewAssignmentController {
                         crewAssignmentService.assign(req)));
     }
 
-    // PUT /api/crew-assignments/{id}/confirm
-    // only the assigned engineer confirms their own assignment
+    
     @PutMapping("/api/crew-assignments/{id}/confirm")
     @PreAuthorize("hasAnyRole('LOCOMOTIVE_ENGINEER','MAINTENANCE_CREW','YARD_MANAGER')")
     public ResponseEntity<APIResponse<CrewAssignmentResponse>> confirm(

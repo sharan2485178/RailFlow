@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
  
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
-                .password(user.getPassword())
+                .password(user.getPassword())//wrapping up the user roles in SimpleGrantedAuthority Object
                 .authorities(List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())))
                 .accountLocked(user.getStatus() == UserStatus.SUSPENDED)
                 .build();

@@ -4,21 +4,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.dto.LocomotiveDTO;
+import com.example.dto.PageResponse;
 import com.example.dto.TimetableAssetsResponse;
 import com.example.dto.TimetableRequest;
 import com.example.dto.TimetableResponse;
 import com.example.dto.TimetableStatusRequest;
 import com.example.dto.TimetableUpdateRequest;
+import com.example.dto.WagonDTO;
 import com.example.enums.TimetableStatus;
 import com.example.enums.TrainStatus;
 import com.example.exception.EntityNotFoundException;
+import com.example.exception.InvalidTimeRangeException;
 import com.example.mapper.TimetableMapper;
-import com.example.model.Locomotive;
 import com.example.model.LocomotiveAssignment;
 import com.example.model.Timetable;
-import com.example.model.Wagon;
 import com.example.model.WagonAssignment;
 import com.example.repository.LocomotiveAssignmentRepository;
 import com.example.repository.LocomotiveRepository;
@@ -63,7 +69,7 @@ public class TimetableServiceImpl implements TimetableService {
 	public TimetableResponse create(TimetableRequest req, String perfomedBy) {
 
 		if (!req.getDepartureTime().isBefore(req.getArrivalTime())) {
-			throw new IllegalArgumentException("Departure time must be before arrival time");
+			throw new InvalidTimeRangeException(req.getDepartureTime(),req.getArrivalTime());
 		}
 
 		Timetable timetable = timetableMapper.toEntity(req);
@@ -84,7 +90,7 @@ public class TimetableServiceImpl implements TimetableService {
 	@Transactional
 	public List<TimetableResponse> getAll(String status) {
 		List<Timetable> timetables;
-		if (status != null && status.isBlank()) {
+		if (status != null && !status.isBlank()) {
 			TimetableStatus timetableStatus;
 			try {
 				timetableStatus = TimetableStatus.valueOf(status.toUpperCase());
@@ -101,44 +107,47 @@ public class TimetableServiceImpl implements TimetableService {
 		return timetables.stream().map(timetableMapper::toDto).collect(Collectors.toList());
 	}
 
-	public Timetable getById(Long id) {
-		return timetableRepository.findById(id).orElseThrow(() -> new RuntimeException("Timetable not found: " + id));
-	}
-
+	
 	@Transactional
 	public TimetableAssetsResponse getAssets(Long id) {
 
-		Timetable timetable = timetableRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("Timetable", id));
+	    Timetable timetable = timetableRepository.findById(id) // ✅ fixed typo
+	            .orElseThrow(() -> new EntityNotFoundException("Timetable", id));
 
-		List<Wagon> wagons = wagonAssignmentRepository.findByTimetableId(id).stream().map(WagonAssignment::getWagon)
-				.collect(Collectors.toList());
+	    List<WagonDTO> wagons = wagonAssignmentRepository.findByTimetableId(id).stream()
+	            .map(WagonAssignment::getWagon)
+	            .map(w -> new WagonDTO(w.getId(), w.getSerialNumber(), w.getType()))
+	            .collect(Collectors.toList());
 
-		List<Locomotive> locomotives = locomotiveAssignmentRepository.findByTimetableId(id).stream()
-				.map(LocomotiveAssignment::getLocomotive).collect(Collectors.toList());
+	    List<LocomotiveDTO> locomotives = locomotiveAssignmentRepository.findByTimetableId(id).stream()
+	            .map(LocomotiveAssignment::getLocomotive)
+	            .map(l -> new LocomotiveDTO(l.getId(), l.getSerialNumber(), l.getModel()))
+	            .collect(Collectors.toList());
+        
+	   
+	    TimetableAssetsResponse response = new TimetableAssetsResponse();
+	    response.setTimetableId(timetable.getId());
+	    response.setTrainId(timetable.getTrain().getId()); 
+	    response.setDepartureTime(timetable.getDepartureTime());
+	    response.setArrivalTime(timetable.getArrivalTime());
+	    response.setWagons(wagons);
+	    response.setLocomotives(locomotives);
 
-		TimetableAssetsResponse response = new TimetableAssetsResponse();
-		response.setTimetableId(timetable.getId());
-		response.setTrainId(timetable.getTrain().getId());
-		response.setDepartureTime(timetable.getDepartureTime());
-		response.setArrivalTime(timetable.getArrivalTime());
-		response.setWagons(wagons);
-		response.setLocomotives(locomotives);
-
-		return response;
+	    return response;
 	}
 
 	@Transactional
 	public TimetableResponse update(Long id, TimetableUpdateRequest req, String performedBy) {
 		Timetable timetable = timetableRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Timetable", id));
-
+		
+        //ON_HOLD & DRAFT Timetable can only updated
 		if (timetable.getStatus() != TimetableStatus.DRAFT && timetable.getStatus() != TimetableStatus.ON_HOLD) {
 			throw new IllegalStateException("Cannot update timetable in status: " + timetable.getStatus());
 		}
 
 		if (!req.getDepartureTime().isBefore(req.getArrivalTime())) {
-			throw new IllegalArgumentException("Departure time must be before arrival time");
+			throw new InvalidTimeRangeException(req.getDepartureTime(),req.getArrivalTime());
 		}
 
 		timetableMapper.toUpdate(timetable, req);
@@ -166,10 +175,7 @@ public class TimetableServiceImpl implements TimetableService {
 		timetable.setStatus(newStatus);
 		timetableRepository.save(timetable);
 
-		// if publishing — run conflict detection
-		if (newStatus == TimetableStatus.PUBLISHED) {
-			pathConflictService.detect(timetable);
-		}
+		
 
 		auditService.log("UPDATE_TIMETABLE_STATUS", "Timetable", id.toString(), performedBy,
 				"Status changed: " + currentStatus + " → " + newStatus);
@@ -198,4 +204,16 @@ public class TimetableServiceImpl implements TimetableService {
 			throw new IllegalStateException("Timetable #" + id + " cannot transition from " + current + " to " + next);
 		}
 	}
+	
+	public PageResponse<TimetableResponse> getAllByPageAndSort(int page,int size,String sortBy){
+		
+		
+	    Sort sort=Sort.by(sortBy).ascending();
+		Pageable pageable=PageRequest.of(page, size,sort);
+		
+		Page<Timetable> timetablePage = timetableRepository.findAll(pageable);
+		return PageResponse.from(timetablePage.map(timetableMapper::toDto));
+	}
+	
+	
 }

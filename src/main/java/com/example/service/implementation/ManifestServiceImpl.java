@@ -97,7 +97,7 @@ public class ManifestServiceImpl implements ManifestService {
 
         // booking must be CONFIRMED
         Booking booking = bookingRepository.findById(req.getBookingId())
-                .orElseThrow(() -> new EntityNotFoundException("Booking", req.getBookingId()));
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found", req.getBookingId()));
 
         if (booking.getStatus() != BookingStatus.CONFIRMED) {
             throw new IllegalStateException(
@@ -120,6 +120,7 @@ public class ManifestServiceImpl implements ManifestService {
     }
 
     @Transactional(readOnly = true)
+    //enhances performance by skips dirty checking, tells Spring that i will only read data and won't update
     public List<ManifestBookingResponse> getBookings(Long manifestId) {
 
         manifestRepository.findById(manifestId)

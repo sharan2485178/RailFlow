@@ -30,11 +30,11 @@ public class YardSlot {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YardSlotStatus status = YardSlotStatus.AVAILABLE;
+    private YardSlotStatus status = YardSlotStatus.AVAILABLE; //AVAILABLE, OCCUPIED, RESERVED, MAINTENANCE
 
     // Asset currently occupying this slot (nullable when slot is free)
     @Enumerated(EnumType.STRING)
-    private AssetType assignedAssetType;
+    private AssetType assignedAssetType; // WAGON, LOCOMOTIVE
 
     private Long assignedAssetId;
 

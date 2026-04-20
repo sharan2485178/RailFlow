@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.api.APIResponse;
+import com.example.dto.PageResponse;
 import com.example.dto.TimetableAssetsResponse;
 import com.example.dto.TimetableRequest;
 import com.example.dto.TimetableResponse;
@@ -35,7 +36,7 @@ public class TimetableController {
         this.timetableService = timetableService;
     }
 
-    // POST /api/timetables
+    
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER')")
     public ResponseEntity<APIResponse<TimetableResponse>> create(
@@ -47,7 +48,15 @@ public class TimetableController {
                 .body(APIResponse.success("Timetable created successfully", res));
     }
 
-    // GET /api/timetables
+    
+    @GetMapping("/page")
+    @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER')")
+    public ResponseEntity<APIResponse<PageResponse<TimetableResponse>>>getAllByPageAndSort(@RequestParam(name="page")int page,@RequestParam(name="size") int size, @RequestParam(name="sortBy") String sortBy){
+    	     PageResponse<TimetableResponse> res=timetableService.getAllByPageAndSort(page,size,sortBy);
+    	     return ResponseEntity.ok(APIResponse.success("Retrieved Successfully",res));
+    }
+    
+   
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','ENGINEER','MAINTENANCE')")
     public ResponseEntity<APIResponse<List<TimetableResponse>>> getAll(
@@ -58,18 +67,9 @@ public class TimetableController {
                 APIResponse.success("Timetables fetched successfully", res));
     }
 
-    // GET /api/timetables/{id}
-//    @GetMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','ENGINEER','MAINTENANCE')")
-//    public ResponseEntity<APIResponse<TimetableResponse>> getById(
-//            @PathVariable Long id) {
-//
-//        TimetableResponse res = timetableService.getById(id);
-//        return ResponseEntity.ok(
-//                APIResponse.success("Timetable fetched successfully", res));
-//    }
+   
 
-    // GET /api/timetables/{id}/assets
+    //id - timetableId
     @GetMapping("/{id}/assets")
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','ENGINEER','MAINTENANCE','YARD_MANAGER')")
     public ResponseEntity<APIResponse<TimetableAssetsResponse>> getAssets(
@@ -80,7 +80,7 @@ public class TimetableController {
                 APIResponse.success("Assets fetched successfully", res));
     }
 
-    // PUT /api/timetables/{id}
+   
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER')")
     public ResponseEntity<APIResponse<TimetableResponse>> update(
@@ -103,5 +103,7 @@ public class TimetableController {
         return ResponseEntity.ok(
                 APIResponse.success("Timetable status updated successfully", res));
     }
+    
+    
     
 }

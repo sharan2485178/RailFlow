@@ -32,7 +32,7 @@ public class ManifestController {
         this.manifestService = manifestService;
     }
 
-    // POST /api/manifests
+   
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER')")
     public ResponseEntity<APIResponse<ManifestResponse>> create(
@@ -43,7 +43,7 @@ public class ManifestController {
                         manifestService.create(req, auth.getName())));
     }
 
-    // GET /api/manifests
+  
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','DISPATCHER','AUDITOR','BILLING')")
     public ResponseEntity<APIResponse<List<ManifestResponse>>> getAll() {
