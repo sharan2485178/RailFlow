@@ -13,7 +13,8 @@ public interface WagonAssignmentRepository extends JpaRepository<WagonAssignment
 	boolean existsByBookingIdAndTimetableId(
             Long bookingId, Long timetableId);
 	
-	boolean existsByWagonIdAndAssetOperationalStatusIn(Long wagonId,List<AssetAssignmentStatus> statuses);
+	boolean existsByBookingIdAndAssetAssignmentStatusIn(Long wagonId,List<AssetAssignmentStatus> statuses);
+	List<WagonAssignment> findByAssetAssignmentStatusIn(List<AssetAssignmentStatus> statuses);
 
 
 }

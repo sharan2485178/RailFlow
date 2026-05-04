@@ -86,6 +86,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(APIResponse.error(ex.getMessage()));
     }
+    @ExceptionHandler(BookingAlreadyFoundException.class)
+    public ResponseEntity<APIResponse<Void>>handleBookingAlreadyFound(BookingAlreadyFoundException ex){
+    	    return ResponseEntity.status(HttpStatus.ACCEPTED).body(APIResponse.error(ex.getMessage()));
+    }
     
     @ExceptionHandler(AssetAlreadyAssignedException.class)
     public ResponseEntity<APIResponse<Void>>handleAssetAlreadyAssigned(AssetAlreadyAssignedException ex){

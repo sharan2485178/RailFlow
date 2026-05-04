@@ -1,6 +1,7 @@
 package com.example.service.implementation;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.example.dto.TimetableResponse;
 import com.example.dto.TimetableStatusRequest;
 import com.example.dto.TimetableUpdateRequest;
 import com.example.dto.WagonDTO;
+import com.example.enums.AssetType;
 import com.example.enums.TimetableStatus;
 import com.example.enums.TrainStatus;
 import com.example.exception.EntityNotFoundException;
@@ -26,12 +28,14 @@ import com.example.mapper.TimetableMapper;
 import com.example.model.LocomotiveAssignment;
 import com.example.model.Timetable;
 import com.example.model.WagonAssignment;
+import com.example.model.YardSlot;
 import com.example.repository.LocomotiveAssignmentRepository;
 import com.example.repository.LocomotiveRepository;
 import com.example.repository.TimetableRepository;
 import com.example.repository.TrainRepository;
 import com.example.repository.WagonAssignmentRepository;
 import com.example.repository.WagonRepository;
+import com.example.repository.YardSlotRepository;
 import com.example.security.AuditService;
 import com.example.service.PathConflictService;
 import com.example.service.TimetableService;
@@ -64,6 +68,9 @@ public class TimetableServiceImpl implements TimetableService {
 
 	@Autowired
 	private LocomotiveAssignmentRepository locomotiveAssignmentRepository;
+	
+	@Autowired
+	private YardSlotRepository yardSlotRepository;
 
 	@Transactional
 	public TimetableResponse create(TimetableRequest req, String perfomedBy) {
@@ -115,14 +122,30 @@ public class TimetableServiceImpl implements TimetableService {
 	            .orElseThrow(() -> new EntityNotFoundException("Timetable", id));
 
 	    List<WagonDTO> wagons = wagonAssignmentRepository.findByTimetableId(id).stream()
-	            .map(WagonAssignment::getWagon)
-	            .map(w -> new WagonDTO(w.getId(), w.getSerialNumber(), w.getType()))
+	            .map(WagonAssignment::getWagon) //fetches wagon based on wagonId
+	            .map(w -> { //block lambda - used when there is a multiple statements and require return statement
+	            	  
+	            	   Optional<YardSlot> slot=yardSlotRepository.findByAssignedAssetTypeAndAssignedAssetId(AssetType.WAGON,w.getId());
+	            	   Long yardId=slot.map(y->y.getYard().getId()).orElse(null);
+	            	   Long slotId=slot.map(y->y.getSlotId()).orElse(null);
+	            	   String trackNumber=slot.map(y->y.getTrackNumber()).orElse("Wagon not present in any yard slot");
+	            	   int position=slot.map(y->y.getPosition()).orElse(0);
+	            	   return new WagonDTO(w.getId(),w.getSerialNumber(),w.getType(),yardId,slotId,trackNumber,position);
+	             })
 	            .collect(Collectors.toList());
 
 	    List<LocomotiveDTO> locomotives = locomotiveAssignmentRepository.findByTimetableId(id).stream()
 	            .map(LocomotiveAssignment::getLocomotive)
-	            .map(l -> new LocomotiveDTO(l.getId(), l.getSerialNumber(), l.getModel()))
+	            .map(l -> {
+	            	    Optional<YardSlot>slot=yardSlotRepository.findByAssignedAssetTypeAndAssignedAssetId(AssetType.LOCOMOTIVE, l.getId());
+	            	    Long yardId=slot.map(x->x.getYard().getId()).orElse(null);
+	            	    Long slotId=slot.map(x->x.getSlotId()).orElse(null);
+	            	    String trackNumber=slot.map(x->x.getTrackNumber()).orElse("Locomotive not present");
+	            	    int position=slot.map(x->x.getPosition()).orElse(0);
+	            	    return new LocomotiveDTO(l.getId(),l.getSerialNumber(),l.getModel(),yardId,slotId,trackNumber,position);
+	            })
 	            .collect(Collectors.toList());
+	    
         
 	   
 	    TimetableAssetsResponse response = new TimetableAssetsResponse();

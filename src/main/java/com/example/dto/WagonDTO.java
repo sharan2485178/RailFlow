@@ -3,13 +3,21 @@ package com.example.dto;
 import com.example.enums.WagonType;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class WagonDTO {
     private Long id;
     private String wagonNumber;
     private WagonType type;
-    // map only the fields you need
+    private Long yardId;
+    private Long slotId;
+    private String trackNumber;
+    private int position;
+   
 }

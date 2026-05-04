@@ -9,4 +9,8 @@ public class LocomotiveDTO {
     private Long id;
     private String locomotiveNumber;
     private String model;
+    private Long yardId;
+    private Long slotId;
+    private String trackNumber;
+    private int position;
 }
