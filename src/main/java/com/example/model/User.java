@@ -29,11 +29,11 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private Role role; //ADMIN, AUDITOR, DISPATCHER,LOCOMOTIVE_ENGINEER, YARD_MANAGER, MAINTENANCE_CREW, FREIGHT_FORWADER
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserStatus status = UserStatus.ACTIVE;
+    private UserStatus status = UserStatus.ACTIVE; //ACTIVE, SUSPENDED
 
     private String suspendReason;
 

@@ -39,13 +39,13 @@ public class TrainServiceImpl implements TrainService {
 
     public List<TrainResponse> getAll(String status) {
         List<Train> trains = (status != null && !status.isBlank())
-            ? trainRepository.findByStatus(TrainStatus.valueOf(status.toUpperCase()))
+            ? trainRepository.findByStatus(TrainStatus.valueOf(status.toUpperCase())) //converting String to enum
             : trainRepository.findAll();
 
         return trains.stream()
             .map(trainMapper::toResponse)
             .collect(Collectors.toList());
-    }
+    } 
 
     public TrainResponse getById(Long id) {
         Train train = trainRepository.findById(id)

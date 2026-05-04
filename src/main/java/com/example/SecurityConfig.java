@@ -41,7 +41,7 @@ public class SecurityConfig {
                 // Public auth endpoints
                 .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
                 // H2 console (dev only)
-                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
+//                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                 // Swagger UI
                 .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()

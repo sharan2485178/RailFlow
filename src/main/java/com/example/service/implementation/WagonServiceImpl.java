@@ -11,6 +11,7 @@ import com.example.dto.WagonResponse;
 import com.example.dto.WagonStatusRequest;
 import com.example.enums.AssetOperationalStatus;
 import com.example.enums.WagonType;
+import com.example.exception.EntityAlreadyExistException;
 import com.example.exception.EntityNotFoundException;
 import com.example.mapper.WagonMapper;
 import com.example.model.Wagon;
@@ -27,7 +28,7 @@ public class WagonServiceImpl implements WagonService {
 
     public WagonResponse register(WagonRequest req, String performedBy) {
         if (wagonRepository.existsBySerialNumber(req.getSerialNumber()))
-            throw new EntityNotFoundException("Wagon",Long.parseLong(req.getSerialNumber()));
+            throw new EntityAlreadyExistException("Wagon",Long.parseLong(req.getSerialNumber()));
 
         Wagon wagon = wagonMapper.toEntity(req);
         wagonRepository.save(wagon);
@@ -63,7 +64,7 @@ public class WagonServiceImpl implements WagonService {
 
         if (!wagon.getSerialNumber().equals(req.getSerialNumber())
                 && wagonRepository.existsBySerialNumber(req.getSerialNumber()))
-            throw new RuntimeException("Serial number already exists: " + req.getSerialNumber());
+            throw new EntityAlreadyExistException("Serial number already exists: " + req.getSerialNumber());
 
         wagon.setType(req.getType());
         wagon.setCapacityTon(req.getCapacityTon());

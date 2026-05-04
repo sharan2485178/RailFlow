@@ -27,7 +27,7 @@ public class Timetable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TimetableStatus status = TimetableStatus.DRAFT;
+    private TimetableStatus status = TimetableStatus.DRAFT; // DRAFT,ON_HOLD,PUBLISHED,IN_DEPARTED,COMPLETED, CANCELLED
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="train_id",nullable=false)

@@ -29,10 +29,7 @@ public class YardController {
         this.yardService = yardService;
     }
 
-    /**
-     * POST /api/yards
-     * Register a new yard.
-     */
+    
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','YARD_MANAGER')")
     public ResponseEntity<APIResponse<YardResponse>> createYard(
@@ -43,10 +40,7 @@ public class YardController {
                 .body(APIResponse.success("Yard created successfully", response));
     }
 
-    /**
-     * GET /api/yards
-     * List all yards.
-     */
+    
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','YARD_MANAGER','DISPATCHER')")
     public ResponseEntity<APIResponse<List<YardResponse>>> getAllYards() {

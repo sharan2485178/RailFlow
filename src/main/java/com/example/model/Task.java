@@ -22,14 +22,14 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TaskStatus status = TaskStatus.PENDING;
+    private TaskStatus status = TaskStatus.PENDING; //PENDING, IN_PROGRESS, COMPLETED, OVERDUE
 
     @Column(nullable = false)
-    private Long relatedEntityId;
+    private Long relatedEntityId;  
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private NotificationEntityType relatedEntityType;
+    private NotificationEntityType relatedEntityType; //TIMETABLE, BOOKING, MANIFEST, WAGON, LOCOMOTIVE, INSPECTION, MAINTENANCE
 
     @Column(nullable = false)
     private LocalDateTime dueDate;

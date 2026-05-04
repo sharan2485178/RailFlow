@@ -10,6 +10,8 @@ import com.example.dto.LocomotiveRequest;
 import com.example.dto.LocomotiveResponse;
 import com.example.dto.LocomotiveStatusRequest;
 import com.example.enums.AssetOperationalStatus;
+import com.example.exception.EntityAlreadyExistException;
+import com.example.exception.EntityNotFoundException;
 import com.example.mapper.LocomotiveMapper;
 import com.example.model.Locomotive;
 import com.example.repository.LocomotiveRepository;
@@ -25,7 +27,7 @@ public class LocomotiveServiceImpl implements LocomotiveService {
 
     public LocomotiveResponse register(LocomotiveRequest req, String performedBy) {
         if (locomotiveRepository.existsBySerialNumber(req.getSerialNumber()))
-            throw new RuntimeException("Serial number already exists: " + req.getSerialNumber());
+            throw new EntityAlreadyExistException("Serial number already exists: " + req.getSerialNumber());
 
         Locomotive loco = locomotiveMapper.toEntity(req);
         locomotiveRepository.save(loco);
@@ -53,11 +55,11 @@ public class LocomotiveServiceImpl implements LocomotiveService {
 
     public LocomotiveResponse update(Long id, LocomotiveRequest req, String performedBy) {
         Locomotive loco = locomotiveRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Locomotive not found: " + id));
+            .orElseThrow(() -> new EntityNotFoundException("Locomotive not found: " + id));
 
         if (!loco.getSerialNumber().equals(req.getSerialNumber())
                 && locomotiveRepository.existsBySerialNumber(req.getSerialNumber()))
-            throw new RuntimeException("Serial number already exists: " + req.getSerialNumber());
+            throw new EntityAlreadyExistException("Serial number already exists: " + req.getSerialNumber());
 
         loco.setModel(req.getModel());
         loco.setCapacityTon(req.getCapacityTon());
@@ -71,7 +73,7 @@ public class LocomotiveServiceImpl implements LocomotiveService {
 
     public LocomotiveResponse changeStatus(Long id, LocomotiveStatusRequest req, String performedBy) {
         Locomotive loco = locomotiveRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Locomotive not found: " + id));
+            .orElseThrow(() -> new EntityNotFoundException("Locomotive not found: " + id));
 
         AssetOperationalStatus oldStatus = loco.getStatus();
         loco.setStatus(req.getStatus());

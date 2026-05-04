@@ -30,10 +30,7 @@ public class YardSlotController {
         this.yardSlotService = yardSlotService;
     }
 
-    /**
-     * POST /api/yard-slots
-     * Configure (create) a new yard slot.
-     */
+    
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','YARD_MANAGER')")
     public ResponseEntity<APIResponse<YardSlotResponse>> configureSlot(

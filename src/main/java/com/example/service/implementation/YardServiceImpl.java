@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dto.YardRequest;
 import com.example.dto.YardResponse;
+import com.example.exception.EntityAlreadyExistException;
 import com.example.mapper.YardMapper;
 import com.example.model.Yard;
 import com.example.repository.YardRepository;
@@ -27,7 +28,7 @@ public class YardServiceImpl implements YardService {
     @Transactional
     public YardResponse create(YardRequest req, String performedBy) {
         if (yardRepository.existsByName(req.getName())) {
-            throw new RuntimeException("Yard with name '" + req.getName() + "' already exists");
+            throw new EntityAlreadyExistException("Yard with name '" + req.getName() + "' already exists");
         }
         Yard yard = yardMapper.toEntity(req);
         yardRepository.save(yard);

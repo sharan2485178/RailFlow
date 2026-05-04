@@ -7,7 +7,8 @@ public enum WagonType {
     TANKER(Set.of(CargoType.LIQUID, CargoType.HAZARDOUS)),
     BOX(Set.of(CargoType.DRY_BULK, CargoType.CONTAINER)),
     FLAT(Set.of(CargoType.CONTAINER, CargoType.HEAVY_MACHINERY, CargoType.STEEL, CargoType.TIMBER));
-
+    //Each enum object holds Set<CargoType> allowedCargoTypes;
+	//WagonType.TANKER → allowedCargoTypes = {LIQUID, HAZARDOUS}
     private final Set<CargoType> allowedCargoTypes;
 
     WagonType(Set<CargoType> allowedCargoTypes) {
